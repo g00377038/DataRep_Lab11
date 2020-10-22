@@ -6,6 +6,8 @@ import { Content } from './components/content';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Read } from './components/read';
+import { Create } from './components/create';
 
 class App extends React.Component {
   render() {
@@ -28,15 +30,16 @@ class App extends React.Component {
           </Navbar>
 
           <br />
+
           <Switch>
             {/*display Content component when path ends with '/'*/}
             <Route path='/' component={Content} exact />
 
             {/*display Header component when path ends with '/creates'*/}
-            <Route path='/create' component={Header} exact />
+            <Route path='/create' component={Create} exact />
 
-            {/*display Footer component when path ends with '/read'*/}
-            <Route path='/read' component={Footer} exact />
+            {/*display read component when path ends with '/read'*/}
+            <Route path='/read' component={Read} exact />
           </Switch>
 
         </div>
