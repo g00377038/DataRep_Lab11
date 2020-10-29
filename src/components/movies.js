@@ -7,7 +7,7 @@ export class Movies extends React.Component{
         return this.props.myMovies.map(
             //arrow function, for every movie return movie item
             (movie)=>{
-                return <MovieItem myMovie = {movie}></MovieItem>
+                return <MovieItem key={movie.imbdID} myMovie = {movie}></MovieItem>
             }
         );
     }

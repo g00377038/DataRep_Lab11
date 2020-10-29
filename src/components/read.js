@@ -1,43 +1,44 @@
 import React from 'react';
 import { MovieItem } from './movieItem';
 import { Movies } from './movies';
+import axios from 'axios';
 
-export class Read extends React.Component{
+export class Read extends React.Component {
 
-state = {
-    //array of movie details
-    movies: [
-        {
-            "Title": "Avengers: Infinity War",
-            "Year": "2018",
-            "imdbID": "tt4154756",
-            "Type": "movie",
-            "Poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg"
-        },
-        {
-            "Title": "Captain America: Civil War",
-            "Year": "2016",
-            "imdbID": "tt3498820",
-            "Type": "movie",
-            "Poster": "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_SX300.jpg"
-        },
-        {
-            "Title": "Charlie Wilson's War",
-            "Year": "2007",
-            "imdbID": "tt0472062",
-            "Type": "movie",
-            "Poster": "https://m.media-amazon.com/images/M/MV5BMTgwMDgwMDc4MF5BMl5BanBnXkFtZTYwOTU3MDM4._V1_SX300.jpg"
-        }
-    ]
+    state = {
+        //array of movie details
+        movies: [
 
-};
+        ]
+
+    };
+
+    componentDidMount() {
+        //retrieve information from URL
+        axios.get('https://jsonblob.com/api/jsonblob/520c3b5e-0312-11eb-a6af-cbf00d776032')
+
+            //callback function for acceptence
+            .then(response => {
+                this.setState(
+                    {
+                        //assign "Search" data to "movies" array
+                        movies: response.data.Search
+                    }
+                )
+            })
+
+            //callback function for rejection
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
     //display movie details to screen
-    render(){
-        return(
+    render() {
+        return (
             <div>
                 <h3>Hello from Read Component</h3>
-                <Movies myMovies = {this.state.movies}></Movies>
+                <Movies myMovies={this.state.movies}></Movies>
             </div>
         );
     }
