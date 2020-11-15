@@ -11,5 +11,6 @@ export class Movies extends React.Component{
             }
         );
     }
+    
 }
 

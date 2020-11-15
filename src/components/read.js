@@ -15,14 +15,14 @@ export class Read extends React.Component {
 
     componentDidMount() {
         //retrieve information from URL
-        axios.get('https://jsonblob.com/api/jsonblob/520c3b5e-0312-11eb-a6af-cbf00d776032')
+        axios.get('http://localhost:4000/api/movies')
 
             //callback function for acceptence
             .then(response => {
                 this.setState(
                     {
                         //assign "Search" data to "movies" array
-                        movies: response.data.Search
+                        movies: response.data.movies
                     }
                 )
             })
