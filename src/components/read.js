@@ -22,7 +22,7 @@ export class Read extends React.Component {
                 this.setState(
                     {
                         //assign "Search" data to "movies" array
-                        movies: response.data.movies
+                        movies: response.data
                     }
                 )
             })

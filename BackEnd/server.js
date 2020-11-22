@@ -3,6 +3,8 @@ const app = express()
 const port = 4000
 const cors = require('cors');
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose'); //add mongoose
+
 
 app.use(cors());
 app.use(function (req, res, next) {
@@ -13,10 +15,27 @@ app.use(function (req, res, next) {
     next();
 });
 
-
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(bodyParser.json())
+
+//connect to mongoDB database
+const myConnectionString = 'mongodb+srv://admin:datarep@cluster0.yhsci.mongodb.net/movies?retryWrites=true&w=majority';
+mongoose.connect(myConnectionString, {useNewUrlParser: true});
+
+//define schema of data to be stored in database
+const Schema = mongoose.Schema;
+
+//schema
+var movieSchema = new Schema({
+    title:String,
+    year:String,
+    poster:String
+});
+
+//create model for database
+var MovieModel =  mongoose.model("movie", movieSchema);
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -24,41 +43,20 @@ app.get('/', (req, res) => {
 
 //listen for "get"
 app.get('/api/movies', (req, res) => {
-    const myMovies = [
-            {
-                "Title": "Avengers: Infinity War",
-                "Year": "2018",
-                "imdbID": "tt4154756",
-                "Type": "movie",
-                "Poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg"
-            },
-            {
-                "Title": "Captain America: Civil War",
-                "Year": "2016",
-                "imdbID": "tt3498820",
-                "Type": "movie",
-                "Poster": "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_SX300.jpg"
-            },
-            {
-                "Title": "World War Z",
-                "Year": "2013",
-                "imdbID": "tt0816711",
-                "Type": "movie",
-                "Poster": "https://m.media-amazon.com/images/M/MV5BNDQ4YzFmNzktMmM5ZC00MDZjLTk1OTktNDE2ODE4YjM2MjJjXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg"
-            },
-            {
-                "Title": "War of the Worlds",
-                "Year": "2005",
-                "imdbID": "tt0407304",
-                "Type": "movie",
-                "Poster": "https://m.media-amazon.com/images/M/MV5BNDUyODAzNDI1Nl5BMl5BanBnXkFtZTcwMDA2NDAzMw@@._V1_SX300.jpg"
-            }
-        ]
-    
-    res.status(200).json({
-        message: "Everything is ok!",
-        movies: myMovies
-    });
+     
+    //find all documents in database
+    MovieModel.find((err, data)=>{
+        res.json(data);
+    })
+
+})
+
+//listen for get request and return info of movie that matches id
+app.get('/api/movies/:id', (req,res)=>{
+    console.log(req.params.id);
+    MovieModel.findById(req.params.id, (err, data)=>{
+        res.json(data);
+    })
 })
 
 //listen for "post", server recieves data
@@ -67,6 +65,16 @@ app.post('/api/movies', (req, res) =>{
     console.log(req.body.title);
     console.log(req.body.year);
     console.log(req.body.poster);
+
+    //server connects and writes movie info to database
+    MovieModel.create({
+        title:req.body.title,
+        year:req.body.year,
+        poster:req.body.poster
+    })
+
+    //prevent client from sending duplicates
+    res.send('Item Received')
 })
 
 app.listen(port, () => {
