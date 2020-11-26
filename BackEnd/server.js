@@ -52,11 +52,23 @@ app.get('/api/movies', (req, res) => {
 })
 
 //listen for get request and return info of movie that matches id
-app.get('/api/movies/:id', (req,res)=>{
+app.get('/api/movies/:id', (req, res)=>{
     console.log(req.params.id);
     MovieModel.findById(req.params.id, (err, data)=>{
         res.json(data);
     })
+})
+
+//listen for delete request and remove info of movie that matches id from database
+app.delete('/api/movies/:id', (req, res)=>{
+    console.log("Delete "+req.params.id);
+    MovieModel.findByIdAndDelete({_id:req.params.id}, (err, data)=>{
+        if(err)
+            res.send(err);
+
+        //prevent client from sending duplicates
+        res.send(data);
+    });
 })
 
 //listen for "post", server recieves data
