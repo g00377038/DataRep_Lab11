@@ -8,6 +8,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Read } from './components/read';
 import { Create } from './components/create';
+import { Edit } from './components/edit';
 
 class App extends React.Component {
   render() {
@@ -40,6 +41,9 @@ class App extends React.Component {
 
             {/*display read component when path ends with '/read'*/}
             <Route path='/read' component={Read} exact />
+
+            {/*display Edit component when path ends with '/edit/:id'*/}
+            <Route path='/edit/:id' component={Edit} exact />
           </Switch>
 
         </div>

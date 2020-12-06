@@ -71,6 +71,23 @@ app.delete('/api/movies/:id', (req, res)=>{
     });
 })
 
+//listen for put request and edit info of movie that matches id from database
+app.put('/api/movies/:id', (req, res)=>{
+    console.log("Update "+req.params.id);
+    console.log(req.body);
+
+    //find and overwrite movie that matches ID
+    MovieModel.findByIdAndUpdate(req.params.id, req.body, {new:true},
+        (err, data)=>{
+            if(err)
+                res.send(err);
+
+            //prevent client from sending duplicates
+            res.send(data);
+        })
+})
+
+
 //listen for "post", server recieves data
 app.post('/api/movies', (req, res) =>{
     console.log('Movie Recieved!');
