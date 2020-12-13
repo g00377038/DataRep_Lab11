@@ -4,6 +4,7 @@ const port = 4000
 const cors = require('cors');
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose'); //add mongoose
+const path = require('path');
 
 
 app.use(cors());
@@ -14,6 +15,12 @@ app.use(function (req, res, next) {
         "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+//where to find build folder
+app.use(express.static(path.join(__dirname, '../build')));
+
+//where to find static folder
+app.use(express.static(path.join(__dirname, 'build//static')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -105,6 +112,12 @@ app.post('/api/movies', (req, res) =>{
     //prevent client from sending duplicates
     res.send('Item Received')
 })
+
+
+app.get('*', (req, res)=>{
+    //send back index.html file 
+    res.sendFile(path.join(__dirname+'/../build/index.html'));
+});
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
